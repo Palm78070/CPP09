@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:30:49 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/04 22:32:54 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/05 01:31:29 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,28 @@ int main(int argc, char **argv)
 	try
 	{
 		if (argc != 2)
-			throw (std::runtime_error("invalid argument: ./btc <input_file>"));
+			throw(std::runtime_error("invalid argument: ./btc <input_file>"));
 	}
-	catch(const std::exception &e)
+	catch (const std::exception &e)
 	{
 		std::cout << e.what() << std::endl;
+		return (1);
 	}
 	std::ifstream inputFile(argv[1]);
 	try
 	{
 		if (!inputFile)
-			throw (std::ios_base::failure("Failed to open file"));
+			throw(std::ios_base::failure("Failed to open file"));
 	}
 	catch (const std::ios_base::failure &e)
 	{
 		std::cout << e.what() << std::endl;
 		exit(1);
 	}
-	//db data = DbToMap("data.csv");
-	std::cout << getYear("2020-01-03") << std::endl;
+	// db data = DbToMap("data.csv");
+	std::cout << "Year " << getYear("2020-11-02") << std::endl;
+	std::cout << "Month " << getMonth("2020-11-02") << std::endl;
+	std::cout << "Day " << getDay("2020-11-02") << std::endl;
 	std::string line;
 	while (getline(inputFile, line))
 	{

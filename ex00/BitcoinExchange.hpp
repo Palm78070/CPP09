@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:33:44 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/04 22:27:55 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/05 01:31:23 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,13 @@
 
 class IstringstreamImpossible : public std::exception
 {
-	public:
-		virtual const char *what() const throw();
+public:
+	virtual const char *what() const throw();
 };
 
-int getYear(const std::string &s);
+int getYear(std::string s);
+int getMonth(std::string s);
+int getDay(std::string s);
 
 typedef std::map<std::time_t, double> db;
 

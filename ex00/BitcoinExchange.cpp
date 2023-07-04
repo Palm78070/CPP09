@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/04 22:59:19 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/05 01:31:17 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,14 @@ const char *IstringstreamImpossible::what() const throw()
 	return ("Can not convert istringstream into integer");
 }
 
-int getYear(std::string s, char mode)
+int getYear(std::string s)
 {
 	std::string year;
 	int res = 0;
 	int start = 0;
 	std::size_t pos = 0;
-	if (mode == 'M' || mode == 'D')
-	{
-		int occ = (mode == 'M') ? 1 : 2;
-		for (int i = 0; i < occ; ++i)
-		{
-			++start;
-			pos = s.find("-");
-		}
-	}
-	else
-		pos = s.find("-");
+
+	pos = s.find("-");
 	if (pos != std::string::npos)
 		year = s.substr(start, pos);
 	std::istringstream iss(year);
@@ -49,13 +40,58 @@ int getYear(std::string s, char mode)
 	return (res);
 }
 
-//int getMon()
-//{}
+int getMonth(std::string s)
+{
+	std::string month;
+	int start = 0;
+	std::size_t pos = 0;
+	int res = 0;
 
-//int getDay()
-//{}
+	for (int i = 0; i < 2; ++i)
+	{
+		start = pos + 1;
+		pos = s.find("-");
+	}
+	if (pos != std::string::npos)
+		month = s.substr(start, pos);
+	std::istringstream iss(month);
+	try
+	{
+		if (!(iss >> res))
+			throw IstringstreamImpossible();
+	}
+	catch (IstringstreamImpossible &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	return (res);
+}
 
-//db DbToMap(const std::string filename)
+int getDay(std::string s)
+{
+	std::string day;
+	int start = 0;
+	std::size_t pos = 0;
+	int res = 0;
+
+	start = s.rfind("-") + 1;
+	pos = s.back();
+	if (pos != std::string::npos)
+		day = s.substr(start, pos);
+	std::istringstream iss(day);
+	try
+	{
+		if (!(iss >> res))
+			throw IstringstreamImpossible();
+	}
+	catch (IstringstreamImpossible &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	return (res);
+}
+
+// db DbToMap(const std::string filename)
 //{
 //	std::ifstream dbFile(filename);
 //	try
@@ -79,4 +115,4 @@ int getYear(std::string s, char mode)
 //		data[] =
 //	}
 //	dbFile.close();
-//}
+// }
