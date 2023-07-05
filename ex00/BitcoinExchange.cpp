@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/05 20:54:16 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/05 22:54:12 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,9 @@ time_t ft_stoepoc(const std::string &input)
 {
 	struct tm t;
 
-	std::vector<std::string> format = ft_split(input, '|');
-	std::vector<std::string> date = ft_split(format[0], '-');
+	//std::vector<std::string> format = ft_split(input, '|');
+	//std::vector<std::string> date = ft_split(format[0], '-');
+	std::vector<std::string> date = ft_split(input, '-');
 	t.tm_year = ft_stoi(date[0]) - 1900;
 	t.tm_mon = ft_stoi(date[1]) - 1;
 	t.tm_mday = ft_stoi(date[2]);
@@ -104,6 +105,19 @@ time_t ft_stoepoc(const std::string &input)
 	t.tm_sec = 0;
 	return (mktime(&t));
 }
+
+//time_t ft_stoepoc(std::vector<std::string> date)
+//{
+//	struct tm t;
+
+//	t.tm_year = ft_stoi(date[0]) - 1900;
+//	t.tm_mon = ft_stoi(date[1]) - 1;
+//	t.tm_mday = ft_stoi(date[2]);
+//	t.tm_hour = 0;
+//	t.tm_min = 0;
+//	t.tm_sec = 0;
+//	return (mktime(&t));
+//}
 
 db DbToMap(const std::string &filename)
 {
@@ -120,32 +134,37 @@ db DbToMap(const std::string &filename)
 	}
 	std::string line;
 	db data;
-	struct tm t;
-	/////////////////
 	getline(dbFile, line);
-	/////////////////
 	while (getline(dbFile, line))
 	{
 		std::vector<std::string> format = ft_split(line, ',');
-		std::vector<std::string> date = ft_split(format[0], '-');
-		t.tm_year = ft_stoi(date[0]) - 1900;
-		t.tm_mon = ft_stoi(date[1]) - 1;
-		t.tm_mday = ft_stoi(date[2]);
-		t.tm_hour = 0;
-		t.tm_min = 0;
-		t.tm_sec = 0;
-		data[mktime(&t)] = ft_stod(format[1]);
-		if (line == "2022-03-29,47115.93")
-		{
-			std::cout << "time_t in function " << ft_stoepoc("2022-03-29,47115.93") << std::endl;
-			std::cout << "map value in str is " << format[1] << std::endl;
-			std::cout << "printDouble() => ";
-			printDouble(ft_stod(format[1]));
-			std::cout << std::endl;
-			std::cout << "1 " << mktime(&t) << std::endl;
-			std::cout << "2 " << mktime(&t) << std::endl;
-		}
+		//std::vector<std::string> date = ft_split(format[0], '-');
+		data[ft_stoepoc(format[0])] = ft_stod(format[1]);
 	}
 	dbFile.close();
 	return (data);
+}
+
+void findBitcoinPrice(const std::string &line, db &data)
+{
+	std::vector<std::string> format = ft_split(line, '|');
+	//std::vector<std::string> date = ft_split(format[0], '-');
+	//std::cout << "date str " << format[0] << std::endl;
+	std::cout << std::endl;
+	time_t date_epoc = ft_stoepoc(format[0]);
+	std::cout << "date is " << date_epoc << std::endl;
+	for (db::iterator it = data.begin(); it != data.end(); ++it)
+	{
+		if (date_epoc > it->first)
+			continue;
+		else if (date_epoc == it->first)
+			std::cout << "date == it->first Key: " << date_epoc << std::endl;
+		else
+		{
+			--it;
+			std::cout << "date < it->first Key: " << it->first << std::endl;
+			break;
+		}
+		//std::cout << it->first << std::endl;
+	}
 }
