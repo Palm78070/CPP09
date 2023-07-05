@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/05 12:47:40 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/05 20:54:16 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ int ft_stoi(const std::string &s)
 	return (res);
 }
 
-float ft_stof(const std::string &s)
+double ft_stod(const std::string &s)
 {
-	float res = 0;
+	double res = 0;
 
 	std::istringstream iss(s);
 	try
@@ -48,49 +48,31 @@ float ft_stof(const std::string &s)
 	{
 		std::cout << e.what() << std::endl;
 	}
+	res = atof(s.c_str());
 	return (res);
 }
 
-// int getYear(std::string s)
-// {
-// 	std::string year;
-// 	int start = 0;
-// 	std::size_t pos = 0;
+int countDecimalPoint(double d)
+{
+	std::ostringstream oss;
+	int count = 0;
+	std::string::size_type pos = 0;
 
-// 	pos = s.find("-");
-// 	if (pos != std::string::npos)
-// 		year = s.substr(start, pos);
-// 	return (ft_stoi(year));
-// }
+	oss << d;
+	std::string s = oss.str();
+	pos = s.find(".");
+	while (pos < s.length())
+	{
+		++count;
+		++pos;
+	}
+	return (count);
+}
 
-// int getMonth(std::string s)
-// {
-// 	std::string month;
-// 	int start = 0;
-// 	std::size_t pos = 0;
-
-// 	for (int i = 0; i < 2; ++i)
-// 	{
-// 		start = pos + 1;
-// 		pos = s.find("-");
-// 	}
-// 	if (pos != std::string::npos)
-// 		month = s.substr(start, pos);
-// 	return (ft_stoi(month));
-// }
-
-// int getDay(std::string s)
-// {
-// 	std::string day;
-// 	int start = 0;
-// 	std::size_t pos = 0;
-
-// 	start = s.rfind("-") + 1;
-// 	pos = s.back();
-// 	if (pos != std::string::npos)
-// 		day = s.substr(start, pos);
-// 	return (ft_stoi(day));
-// }
+void printDouble(double d)
+{
+	std::cout << std::fixed << std::setprecision(countDecimalPoint(d)) << d;
+}
 
 std::vector<std::string> ft_split(const std::string &s, char delim)
 {
@@ -108,7 +90,22 @@ std::vector<std::string> ft_split(const std::string &s, char delim)
 	return (res);
 }
 
-db DbToMap(const std::string filename)
+time_t ft_stoepoc(const std::string &input)
+{
+	struct tm t;
+
+	std::vector<std::string> format = ft_split(input, '|');
+	std::vector<std::string> date = ft_split(format[0], '-');
+	t.tm_year = ft_stoi(date[0]) - 1900;
+	t.tm_mon = ft_stoi(date[1]) - 1;
+	t.tm_mday = ft_stoi(date[2]);
+	t.tm_hour = 0;
+	t.tm_min = 0;
+	t.tm_sec = 0;
+	return (mktime(&t));
+}
+
+db DbToMap(const std::string &filename)
 {
 	std::ifstream dbFile(filename);
 	try
@@ -123,15 +120,31 @@ db DbToMap(const std::string filename)
 	}
 	std::string line;
 	db data;
-	struct tm t = {0};
+	struct tm t;
+	/////////////////
+	getline(dbFile, line);
+	/////////////////
 	while (getline(dbFile, line))
 	{
-		std::vector<std::string> format = ft_split(line, '|');
+		std::vector<std::string> format = ft_split(line, ',');
 		std::vector<std::string> date = ft_split(format[0], '-');
-		t.tm_year = ft_stoi(date[0]);
-		t.tm_mon = ft_stoi(date[1]);
+		t.tm_year = ft_stoi(date[0]) - 1900;
+		t.tm_mon = ft_stoi(date[1]) - 1;
 		t.tm_mday = ft_stoi(date[2]);
-		data[mktime(&t)] = ft_stof(format[1]);
+		t.tm_hour = 0;
+		t.tm_min = 0;
+		t.tm_sec = 0;
+		data[mktime(&t)] = ft_stod(format[1]);
+		if (line == "2022-03-29,47115.93")
+		{
+			std::cout << "time_t in function " << ft_stoepoc("2022-03-29,47115.93") << std::endl;
+			std::cout << "map value in str is " << format[1] << std::endl;
+			std::cout << "printDouble() => ";
+			printDouble(ft_stod(format[1]));
+			std::cout << std::endl;
+			std::cout << "1 " << mktime(&t) << std::endl;
+			std::cout << "2 " << mktime(&t) << std::endl;
+		}
 	}
 	dbFile.close();
 	return (data);

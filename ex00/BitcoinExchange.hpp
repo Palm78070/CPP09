@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:33:44 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/05 12:45:30 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/05 20:53:14 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <limits>
+#include <iomanip>
+#include <cfloat>
 
 class IstringstreamImpossible : public std::exception
 {
@@ -28,12 +31,11 @@ public:
 	virtual const char *what() const throw();
 };
 
-float ft_stof(const std::string &s);
+double ft_stod(const std::string &s);
 int ft_stoi(const std::string &s);
-int getYear(std::string s);
-int getMonth(std::string s);
-int getDay(std::string s);
+time_t ft_stoepoc(const std::string &input);
 std::vector<std::string> ft_split(const std::string &s, char delim);
+void printDouble(double d);
 
 typedef std::map<std::time_t, double> db;
 
