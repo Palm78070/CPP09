@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/06 22:03:07 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/06 22:29:53 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,11 +168,11 @@ bool input_error(const time_t &epoc, const double &value, const std::string &dat
 	return (false);
 }
 
-void findBitcoinPrice(const std::string &line, db &data)
+void findBitcoinPrice(const std::string &line, const db &data)
 {
 	std::vector<std::string> format = ft_split(line, '|');
 	std::cout << std::flush;
-	time_t date_epoc = ft_stoepoc(format[0]);
+	const time_t date_epoc = ft_stoepoc(format[0]);
 	//std::cout << "format[1] " << format[1] << " => ";
 	double value = ft_stod(format[1]);
 
@@ -180,7 +180,7 @@ void findBitcoinPrice(const std::string &line, db &data)
 	//std::cout << " => " << format[0] << std::endl;
 	if (input_error(date_epoc, value, format[0]))
 		return;
-	for (db::iterator it = data.begin(); it != data.end(); ++it)
+	for (db::const_iterator it = data.begin(); it != data.end(); ++it)
 	{
 		if (date_epoc > it->first)
 			continue;

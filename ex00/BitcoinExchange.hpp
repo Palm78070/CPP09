@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:33:44 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/06 22:03:21 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/06 22:24:28 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,6 @@ std::vector<std::string> ft_split(const std::string &s, char delim);
 typedef std::map<std::time_t, double> db;
 
 db DbToMap(const std::string &filename);
-void findBitcoinPrice(const std::string &line, db &data);
+void findBitcoinPrice(const std::string &line, const db &data);
 
 #endif
