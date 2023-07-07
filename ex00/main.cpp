@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:30:49 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/06 20:13:20 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/07 22:49:07 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,10 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 	db data = DbToMap("data.csv");
-	//std::cout << "time_t " << ft_stoepoc("2022-03-29,47115.93") << std::endl;
-	//std::cout << data[ft_stoepoc("2022-03-29,47115.93")] << std::endl;
 	std::string line;
 	getline(inputFile, line);
 	while (getline(inputFile, line))
-	{
-		//std::cout << line << std::endl;
-		//std::cout << ft_stoepoc(line) << std::endl;
 		findBitcoinPrice(line, data);
-	}
 	inputFile.close();
 	return (0);
 }

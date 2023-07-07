@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/06 22:29:53 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/07 22:49:14 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,30 @@ const char *NumberTooLarge::what() const throw()
 	return ("Error: too large a number.");
 }
 
+bool isNum(const std::string &input)
+{
+	for (std::string::size_type i = 0; i != input.length(); ++i)
+	{
+		if (input[i] == '.')
+		{
+			if (i - 1 >= 0 && !(input[i - 1] >= '0' && input[i - 1] <= '9'))
+				return (false);
+			if (i + 1 != input.length() && !(input[i - 1] >= '0' && input[i - 1] <= '9'))
+				return (false);
+		}
+		else if (!isalpha(input[i]))
+			return (false);
+	}
+	return (true);
+}
+
 int ft_stoi(const std::string &s)
 {
 	int res = 0;
 
 	std::istringstream iss(s);
-	try
-	{
-		if (!(iss >> res))
-			throw IstringstreamImpossible();
-	}
-	catch (IstringstreamImpossible &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
+	if (!(iss >> res))
+		throw BadInput();
 	return (res);
 }
 
@@ -172,12 +182,17 @@ void findBitcoinPrice(const std::string &line, const db &data)
 {
 	std::vector<std::string> format = ft_split(line, '|');
 	std::cout << std::flush;
-	const time_t date_epoc = ft_stoepoc(format[0]);
-	//std::cout << "format[1] " << format[1] << " => ";
 	double value = ft_stod(format[1]);
-
-	//std::cout << "\ndate is " << date_epoc;
-	//std::cout << " => " << format[0] << std::endl;
+	time_t date_epoc;
+	try
+	{
+		date_epoc = ft_stoepoc(format[0]);
+	}
+	catch (BadInput &e)
+	{
+		std::cout << e.what() << " => " << format[0] << std::endl;
+		return;
+	}
 	if (input_error(date_epoc, value, format[0]))
 		return;
 	for (db::const_iterator it = data.begin(); it != data.end(); ++it)
@@ -186,22 +201,14 @@ void findBitcoinPrice(const std::string &line, const db &data)
 			continue;
 		else if (date_epoc == it->first)
 		{
-			//std::cout << "date == it->first Key: " << date_epoc << std::endl;
-			//std::cout << "date: " << date_epoc << " it->first: " << it->first << " => ";
-			//std::cout << "date == it->first => ";
 			std::cout << format[0] << " => " << value << " = " << value * it->second << std::endl;
 			break;
 		}
 		else if (date_epoc < it->first)
 		{
-			//std::cout << "date < it->first Key: " << it->first << std::endl;
-			//std::cout << "date: " << date_epoc << " it->first: " << it->first << " => ";
-			//std::cout << "date < it->first => ";
 			--it;
-			//std::cout << "choose before => it->first Key: " << it->first << std::endl;
 			std::cout << format[0] << " => " << value << " = " << value * it->second << std::endl;
 			break;
 		}
-		//std::cout << it->first << std::endl;
 	}
 }
