@@ -6,7 +6,7 @@
 #    By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/04 19:19:19 by rthammat          #+#    #+#              #
-#    Updated: 2023/07/07 22:49:07 by rthammat         ###   ########.fr        #
+#    Updated: 2023/07/07 23:41:28 by rthammat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,8 @@ NAME := ./btc
 
 CXX := c++
 
-#CXXFLAGS := -Wall -Werror -Wextra -fsanitize=address --std=c++98 -g
-CXXFLAGS := -Wall -Werror -Wextra --std=c++98 -g
+CXXFLAGS := -Wall -Werror -Wextra -fsanitize=address --std=c++98 -g
+# CXXFLAGS := -Wall -Werror -Wextra --std=c++98 -g
 
 SRCS := main.cpp \
 		BitcoinExchange.cpp \

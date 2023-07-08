@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/07 22:49:14 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/09 01:23:05 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ const char *IstringstreamImpossible::what() const throw()
 
 const char *BadInput::what() const throw()
 {
-	return ("Error: bad input");
+	return ("Error: bad input => ");
 }
 
 const char *NotPositiveNumber::what() const throw()
@@ -36,15 +36,24 @@ bool isNum(const std::string &input)
 {
 	for (std::string::size_type i = 0; i != input.length(); ++i)
 	{
+		while (i != input.length() && (input[i] == '-' || input[i] == '+'))
+			++i;
 		if (input[i] == '.')
 		{
-			if (i - 1 >= 0 && !(input[i - 1] >= '0' && input[i - 1] <= '9'))
+			int head_tail = (i == 0 || i == input.length() - 1);
+			int front = i - 1 >= 0 && !(input[i - 1] >= '0' && input[i - 1] <= '9');
+			int back = i + 1 != input.length() && !(input[i - 1] >= '0' && input[i - 1] <= '9');
+			if (head_tail || front || back)
+			{
+				throw BadInput();
 				return (false);
-			if (i + 1 != input.length() && !(input[i - 1] >= '0' && input[i - 1] <= '9'))
-				return (false);
+			}
 		}
-		else if (!isalpha(input[i]))
+		else if (!isdigit(input[i]) && input[i] != '.' && input[i] != ' ')
+		{
+			throw BadInput();
 			return (false);
+		}
 	}
 	return (true);
 }
@@ -84,19 +93,33 @@ int countDecimalPoint(double d)
 	return (count);
 }
 
-std::vector<std::string> ft_split(const std::string &s, char delim)
+std::string *ft_split(const std::string &s, char delim)
 {
-	std::vector<std::string> res;
+	std::string *res;
+	std::string str = s;
+	int size = 0;
 	std::string::size_type start = 0;
-	std::string::size_type end = s.find(delim);
+	std::string::size_type end = str.find(delim);
 
+	for (std::string::iterator i = str.begin(); i != str.end(); ++i)
+	{
+		if (*i == delim)
+			++size;
+	}
+	if (size == 0 || (delim == '-' && size + 1 != 3))
+	{
+		throw BadInput();
+		// return (NULL);
+	}
+	res = new std::string[size + 1];
+	int i = 0;
 	while (end != std::string::npos)
 	{
-		res.push_back(s.substr(start, end - start));
+		res[i++] = str.substr(start, end - start);
 		start = end + 1;
-		end = s.find(delim, start);
+		end = str.find(delim, start);
 	}
-	res.push_back(s.substr(start));
+	res[i] = str.substr(start);
 	return (res);
 }
 
@@ -104,13 +127,14 @@ time_t ft_stoepoc(const std::string &input)
 {
 	struct tm t;
 
-	std::vector<std::string> date = ft_split(input, '-');
+	std::string *date = ft_split(input, '-');
 	t.tm_year = ft_stoi(date[0]) - 1900;
 	t.tm_mon = ft_stoi(date[1]) - 1;
 	t.tm_mday = ft_stoi(date[2]);
 	t.tm_hour = 0;
 	t.tm_min = 0;
 	t.tm_sec = 0;
+	delete[] date;
 	return (mktime(&t));
 }
 
@@ -132,69 +156,32 @@ db DbToMap(const std::string &filename)
 	getline(dbFile, line);
 	while (getline(dbFile, line))
 	{
-		std::vector<std::string> format = ft_split(line, ',');
+		std::string *format = ft_split(line, ',');
 		data[ft_stoepoc(format[0])] = ft_stod(format[1]);
+		delete[] format;
 	}
 	dbFile.close();
 	return (data);
 }
 
-bool input_error(const time_t &epoc, const double &value, const std::string &date)
+void check_input_error(const time_t &epoc, const double &value)
 {
-	try
-	{
-		if (epoc < 0)
-		{
-			throw BadInput();
-		}
-		else if (value < 0)
-		{
-			throw NotPositiveNumber();
-		}
-		else if (value > 1000)
-		{
-			throw NumberTooLarge();
-		}
-		else if (epoc < ft_stoepoc("2009-01-02"))
-		{
-			throw BadInput();
-		}
-	}
-	catch (const BadInput &e)
-	{
-		std::cout << e.what() << " => " << date << std::endl;
-		return (true);
-	}
-	catch (const NotPositiveNumber &e)
-	{
-		std::cout << e.what() << std::endl;
-		return (true);
-	}
-	catch (const NumberTooLarge &e)
-	{
-		std::cout << e.what() << std::endl;
-		return (true);
-	}
-	return (false);
+	if (epoc < 0)
+		throw BadInput();
+	else if (value < 0)
+		throw NotPositiveNumber();
+	else if (value > 1000)
+		throw NumberTooLarge();
+	else if (epoc < ft_stoepoc("2009-01-02"))
+		throw BadInput();
 }
 
-void findBitcoinPrice(const std::string &line, const db &data)
+void findBitcoinPrice(std::string *format, double value, const db &data)
 {
-	std::vector<std::string> format = ft_split(line, '|');
 	std::cout << std::flush;
-	double value = ft_stod(format[1]);
-	time_t date_epoc;
-	try
-	{
-		date_epoc = ft_stoepoc(format[0]);
-	}
-	catch (BadInput &e)
-	{
-		std::cout << e.what() << " => " << format[0] << std::endl;
-		return;
-	}
-	if (input_error(date_epoc, value, format[0]))
-		return;
+	time_t date_epoc = ft_stoepoc(format[0]);
+	// date_epoc = 1293987600;
+	check_input_error(date_epoc, value);
 	for (db::const_iterator it = data.begin(); it != data.end(); ++it)
 	{
 		if (date_epoc > it->first)

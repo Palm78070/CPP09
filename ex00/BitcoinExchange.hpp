@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:33:44 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/07 22:49:06 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/08 01:41:29 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #include <sstream>
 #include <cstdlib>
 #include <string>
-#include <vector>
 #include <limits>
 #include <iomanip>
 #include <cfloat>
@@ -50,14 +49,15 @@ public:
 	virtual const char *what() const throw();
 };
 
+bool isNum(const std::string &input);
 double ft_stod(const std::string &s);
 int ft_stoi(const std::string &s);
 time_t ft_stoepoc(const std::string &input);
-std::vector<std::string> ft_split(const std::string &s, char delim);
+std::string *ft_split(const std::string &s, char delim);
 
 typedef std::map<std::time_t, double> db;
 
 db DbToMap(const std::string &filename);
-void findBitcoinPrice(const std::string &line, const db &data);
+void findBitcoinPrice(std::string *format, double value, const db &data);
 
 #endif
