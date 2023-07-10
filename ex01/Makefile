@@ -6,19 +6,19 @@
 #    By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/10 22:34:37 by rthammat          #+#    #+#              #
-#    Updated: 2023/07/10 22:35:25 by rthammat         ###   ########.fr        #
+#    Updated: 2023/07/10 23:47:11 by rthammat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME := ./btc
+NAME := ./RPN
 
 CXX := c++
 
-#CXXFLAGS := -Wall -Werror -Wextra -fsanitize=address --std=c++98 -g
-CXXFLAGS := -Wall -Werror -Wextra --std=c++98 -g
+CXXFLAGS := -Wall -Werror -Wextra -fsanitize=address --std=c++98 -g
+#CXXFLAGS := -Wall -Werror -Wextra --std=c++98 -g
 
 SRCS := main.cpp \
-		BitcoinExchange.cpp \
+		RPN.cpp \
 
 OBJS := $(SRCS:.cpp=.o)
 
