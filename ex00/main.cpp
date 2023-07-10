@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:30:49 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/10 19:43:18 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/10 22:39:51 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int main(int argc, char **argv)
 		getline(inputFile, line);
 		while (getline(inputFile, line))
 			btc.check_format(line);
-		// findBitcoinPrice(line, data);
 		inputFile.close();
 	}
 	catch (const std::exception &e)

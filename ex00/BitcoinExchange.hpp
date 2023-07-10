@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:33:44 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/10 21:24:21 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/10 22:54:51 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ private:
 	long long _minDate;
 	long long _maxDate;
 	int _badInput;
+	struct tm _t;
 };
 
 #endif

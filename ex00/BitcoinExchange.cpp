@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/10 21:54:44 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/10 23:00:38 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,17 +155,15 @@ std::string *BitcoinExchange::ft_split(const std::string &s, char delim)
 
 long long BitcoinExchange::ft_stoepoc(const std::string &input)
 {
-	struct tm t;
-
 	std::string *date = this->ft_split(input, '-');
-	t.tm_year = this->ft_stoi(date[0]) - 1900;
-	t.tm_mon = this->ft_stoi(date[1]) - 1;
-	t.tm_mday = this->ft_stoi(date[2]);
-	t.tm_hour = 0;
-	t.tm_min = 0;
-	t.tm_sec = 0;
+	this->_t.tm_year = this->ft_stoi(date[0]) - 1900;
+	this->_t.tm_mon = this->ft_stoi(date[1]) - 1;
+	this->_t.tm_mday = this->ft_stoi(date[2]);
+	this->_t.tm_hour = 0;
+	this->_t.tm_min = 0;
+	this->_t.tm_sec = 0;
 	delete[] date;
-	return (mktime(&t));
+	return (mktime(&this->_t));
 }
 
 void BitcoinExchange::DbToMap(const std::string &filename)
@@ -222,7 +220,6 @@ void BitcoinExchange::check_input_error(const long long &epoc, const double &val
 
 void BitcoinExchange::findBitcoinPrice(std::string *format, double value)
 {
-	std::cout << std::flush;
 	long long date_epoc = this->ft_stoepoc(format[0]);
 	this->check_input_error(date_epoc, value);
 	for (db::const_iterator it = this->_data.begin(); it != this->_data.end(); ++it)
