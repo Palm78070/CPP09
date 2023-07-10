@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:33:44 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/08 01:41:29 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/10 21:24:21 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,39 +25,57 @@
 #include <cfloat>
 #include <ctype.h>
 
-class IstringstreamImpossible : public std::exception
+typedef std::map<long long, double> db;
+
+class BitcoinExchange
 {
 public:
-	virtual const char *what() const throw();
+	BitcoinExchange(char delim);
+	BitcoinExchange(const BitcoinExchange &src);
+	BitcoinExchange &operator=(const BitcoinExchange &src);
+	~BitcoinExchange();
+	class IstringstreamImpossible : public std::exception
+	{
+	public:
+		virtual const char *what() const throw();
+	};
+
+	class BadInput : public std::exception
+	{
+	public:
+		virtual const char *what() const throw();
+	};
+
+	class NotPositiveNumber : public std::exception
+	{
+	public:
+		virtual const char *what() const throw();
+	};
+
+	class NumberTooLarge : public std::exception
+	{
+	public:
+		virtual const char *what() const throw();
+	};
+
+	bool isNum(const std::string &input);
+	double ft_stod(const std::string &s);
+	int ft_stoi(const std::string &s);
+	long long ft_stoepoc(const std::string &input);
+	std::string *ft_split(const std::string &s, char delim);
+	void check_input_error(const long long &epoc, const double &value);
+
+	void DbToMap(const std::string &filename);
+	void findBitcoinPrice(std::string *format, double value);
+	void check_format(const std::string &line);
+	void checkDateValid(char delim, int size, std::string &s);
+
+private:
+	char _delim;
+	db _data;
+	long long _minDate;
+	long long _maxDate;
+	int _badInput;
 };
-
-class BadInput : public std::exception
-{
-public:
-	virtual const char *what() const throw();
-};
-
-class NotPositiveNumber : public std::exception
-{
-public:
-	virtual const char *what() const throw();
-};
-
-class NumberTooLarge : public std::exception
-{
-public:
-	virtual const char *what() const throw();
-};
-
-bool isNum(const std::string &input);
-double ft_stod(const std::string &s);
-int ft_stoi(const std::string &s);
-time_t ft_stoepoc(const std::string &input);
-std::string *ft_split(const std::string &s, char delim);
-
-typedef std::map<std::time_t, double> db;
-
-db DbToMap(const std::string &filename);
-void findBitcoinPrice(std::string *format, double value, const db &data);
 
 #endif

@@ -6,39 +6,11 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:30:49 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/08 01:41:33 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/10 19:43:18 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
-
-void check_format(const std::string &line, const db &data)
-{
-	std::string *format = NULL;
-	std::cout << std::flush;
-	double value;
-	try
-	{
-		format = ft_split(line, '|');
-		value = ft_stod(format[1]);
-		isNum(format[1]);
-		findBitcoinPrice(format, value, data);
-		if (format)
-			delete[] format;
-	}
-	catch (BadInput &e)
-	{
-		std::cout << e.what() << line << std::endl;
-	}
-	catch (const NotPositiveNumber &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	catch (const NumberTooLarge &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-}
 
 int main(int argc, char **argv)
 {
@@ -49,11 +21,12 @@ int main(int argc, char **argv)
 		std::ifstream inputFile(argv[1]);
 		if (!inputFile)
 			throw(std::ios_base::failure("Failed to open file"));
-		db data = DbToMap("data.csv");
+		BitcoinExchange btc('|');
+		btc.DbToMap("data.csv");
 		std::string line;
 		getline(inputFile, line);
 		while (getline(inputFile, line))
-			check_format(line, data);
+			btc.check_format(line);
 		// findBitcoinPrice(line, data);
 		inputFile.close();
 	}

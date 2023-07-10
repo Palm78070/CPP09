@@ -6,33 +6,60 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/09 01:23:05 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/10 21:54:44 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
 
-const char *IstringstreamImpossible::what() const throw()
+BitcoinExchange::BitcoinExchange(char delim) : _delim(delim), _minDate(LONG_MAX), _maxDate(0), _badInput(0)
+{
+}
+
+BitcoinExchange::BitcoinExchange(const BitcoinExchange &src)
+{
+	*this = src;
+}
+
+BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src)
+{
+	if (this != &src)
+	{
+		this->_delim = src._delim;
+		db tmp(src._data);
+		this->_data = tmp;
+		this->_minDate = src._minDate;
+		this->_maxDate = src._maxDate;
+		this->_badInput = src._badInput;
+	}
+	return (*this);
+}
+
+BitcoinExchange::~BitcoinExchange()
+{
+}
+
+const char *BitcoinExchange::IstringstreamImpossible::what() const throw()
 {
 	return ("Can not convert istringstream into integer");
 }
 
-const char *BadInput::what() const throw()
+const char *BitcoinExchange::BadInput::what() const throw()
 {
-	return ("Error: bad input => ");
+	return ("Error: bad input ");
 }
 
-const char *NotPositiveNumber::what() const throw()
+const char *BitcoinExchange::NotPositiveNumber::what() const throw()
 {
 	return ("Error: not a positive number.");
 }
 
-const char *NumberTooLarge::what() const throw()
+const char *BitcoinExchange::NumberTooLarge::what() const throw()
 {
 	return ("Error: too large a number.");
 }
 
-bool isNum(const std::string &input)
+bool BitcoinExchange::isNum(const std::string &input)
 {
 	for (std::string::size_type i = 0; i != input.length(); ++i)
 	{
@@ -44,21 +71,15 @@ bool isNum(const std::string &input)
 			int front = i - 1 >= 0 && !(input[i - 1] >= '0' && input[i - 1] <= '9');
 			int back = i + 1 != input.length() && !(input[i - 1] >= '0' && input[i - 1] <= '9');
 			if (head_tail || front || back)
-			{
 				throw BadInput();
-				return (false);
-			}
 		}
 		else if (!isdigit(input[i]) && input[i] != '.' && input[i] != ' ')
-		{
 			throw BadInput();
-			return (false);
-		}
 	}
 	return (true);
 }
 
-int ft_stoi(const std::string &s)
+int BitcoinExchange::ft_stoi(const std::string &s)
 {
 	int res = 0;
 
@@ -68,7 +89,7 @@ int ft_stoi(const std::string &s)
 	return (res);
 }
 
-double ft_stod(const std::string &s)
+double BitcoinExchange::ft_stod(const std::string &s)
 {
 	double res = 0;
 
@@ -76,24 +97,37 @@ double ft_stod(const std::string &s)
 	return (res);
 }
 
-int countDecimalPoint(double d)
+void BitcoinExchange::checkDateValid(char delim, int size, std::string &s)
 {
-	std::ostringstream oss;
-	int count = 0;
-	std::string::size_type pos = 0;
-
-	oss << d;
-	std::string s = oss.str();
-	pos = s.find(".");
-	while (pos < s.length())
+	if (delim == '-')
 	{
-		++count;
-		++pos;
+		if (size + 1 != 3)
+		{
+			this->_badInput = 0;
+			throw BadInput();
+		}
+		int count_delim = 0;
+		for (std::string::iterator i = s.begin(); i != s.end(); ++i)
+		{
+			if (count_delim >= 2)
+				break;
+			if (*i == '-')
+				++count_delim;
+			if (!(*i >= '0' && *i <= '9') && *i != '-')
+			{
+				this->_badInput = 0;
+				throw BadInput();
+			}
+		}
 	}
-	return (count);
+	if (size == 0)
+	{
+		this->_badInput = 0;
+		throw BadInput();
+	}
 }
 
-std::string *ft_split(const std::string &s, char delim)
+std::string *BitcoinExchange::ft_split(const std::string &s, char delim)
 {
 	std::string *res;
 	std::string str = s;
@@ -106,11 +140,7 @@ std::string *ft_split(const std::string &s, char delim)
 		if (*i == delim)
 			++size;
 	}
-	if (size == 0 || (delim == '-' && size + 1 != 3))
-	{
-		throw BadInput();
-		// return (NULL);
-	}
+	checkDateValid(delim, size, str);
 	res = new std::string[size + 1];
 	int i = 0;
 	while (end != std::string::npos)
@@ -123,14 +153,14 @@ std::string *ft_split(const std::string &s, char delim)
 	return (res);
 }
 
-time_t ft_stoepoc(const std::string &input)
+long long BitcoinExchange::ft_stoepoc(const std::string &input)
 {
 	struct tm t;
 
-	std::string *date = ft_split(input, '-');
-	t.tm_year = ft_stoi(date[0]) - 1900;
-	t.tm_mon = ft_stoi(date[1]) - 1;
-	t.tm_mday = ft_stoi(date[2]);
+	std::string *date = this->ft_split(input, '-');
+	t.tm_year = this->ft_stoi(date[0]) - 1900;
+	t.tm_mon = this->ft_stoi(date[1]) - 1;
+	t.tm_mday = this->ft_stoi(date[2]);
 	t.tm_hour = 0;
 	t.tm_min = 0;
 	t.tm_sec = 0;
@@ -138,7 +168,7 @@ time_t ft_stoepoc(const std::string &input)
 	return (mktime(&t));
 }
 
-db DbToMap(const std::string &filename)
+void BitcoinExchange::DbToMap(const std::string &filename)
 {
 	std::ifstream dbFile(filename);
 	try
@@ -156,33 +186,46 @@ db DbToMap(const std::string &filename)
 	getline(dbFile, line);
 	while (getline(dbFile, line))
 	{
-		std::string *format = ft_split(line, ',');
-		data[ft_stoepoc(format[0])] = ft_stod(format[1]);
+		std::string *format = this->ft_split(line, ',');
+		long long date = this->ft_stoepoc(format[0]);
+		this->_minDate = (this->_minDate > date && date >= 0) ? date : this->_minDate;
+		this->_maxDate = (this->_maxDate < date && date >= 0) ? date : this->_maxDate;
+		data[date] = this->ft_stod(format[1]);
 		delete[] format;
 	}
 	dbFile.close();
-	return (data);
+	this->_data = data;
 }
 
-void check_input_error(const time_t &epoc, const double &value)
+void BitcoinExchange::check_input_error(const long long &epoc, const double &value)
 {
 	if (epoc < 0)
+	{
+		this->_badInput = 1;
 		throw BadInput();
+	}
 	else if (value < 0)
 		throw NotPositiveNumber();
 	else if (value > 1000)
 		throw NumberTooLarge();
-	else if (epoc < ft_stoepoc("2009-01-02"))
+	else if (epoc < this->_minDate)
+	{
+		this->_badInput = -1;
 		throw BadInput();
+	}
+	else if (epoc > this->_maxDate)
+	{
+		this->_badInput = 2;
+		throw BadInput();
+	}
 }
 
-void findBitcoinPrice(std::string *format, double value, const db &data)
+void BitcoinExchange::findBitcoinPrice(std::string *format, double value)
 {
 	std::cout << std::flush;
-	time_t date_epoc = ft_stoepoc(format[0]);
-	// date_epoc = 1293987600;
-	check_input_error(date_epoc, value);
-	for (db::const_iterator it = data.begin(); it != data.end(); ++it)
+	long long date_epoc = this->ft_stoepoc(format[0]);
+	this->check_input_error(date_epoc, value);
+	for (db::const_iterator it = this->_data.begin(); it != this->_data.end(); ++it)
 	{
 		if (date_epoc > it->first)
 			continue;
@@ -197,5 +240,40 @@ void findBitcoinPrice(std::string *format, double value, const db &data)
 			std::cout << format[0] << " => " << value << " = " << value * it->second << std::endl;
 			break;
 		}
+	}
+}
+
+void BitcoinExchange::check_format(const std::string &line)
+{
+	std::string *format = NULL;
+	double value;
+	try
+	{
+		format = this->ft_split(line, '|');
+		value = this->ft_stod(format[1]);
+		this->isNum(format[1]);
+		this->findBitcoinPrice(format, value);
+		if (format)
+			delete[] format;
+	}
+	catch (BadInput &e)
+	{
+		std::cout << e.what();
+		if (this->_badInput == -1)
+			std::cout << "(Date out of range, too old) => " << line << std::endl;
+		else if (this->_badInput == 1)
+			std::cout << "(Invalid date format) => ";
+		else if (this->_badInput == 2)
+			std::cout << "(Date out of range, too late) => " << line << std::endl;
+		else
+			std::cout << "correct format is [Year-Month-Day | float/positive integer] => " << line << std::endl;
+	}
+	catch (const NotPositiveNumber &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	catch (const NumberTooLarge &e)
+	{
+		std::cout << e.what() << std::endl;
 	}
 }
