@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/10 23:00:38 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/11 02:24:17 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,7 +259,7 @@ void BitcoinExchange::check_format(const std::string &line)
 		if (this->_badInput == -1)
 			std::cout << "(Date out of range, too old) => " << line << std::endl;
 		else if (this->_badInput == 1)
-			std::cout << "(Invalid date format) => ";
+			std::cout << "(Invalid date format) => " << line << std::endl;
 		else if (this->_badInput == 2)
 			std::cout << "(Date out of range, too late) => " << line << std::endl;
 		else
