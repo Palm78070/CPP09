@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/11 02:24:17 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 02:30:33 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 BitcoinExchange::BitcoinExchange(char delim) : _delim(delim), _minDate(LONG_MAX), _maxDate(0), _badInput(0)
 {
+	std::memset(&this->_t, 0, sizeof(struct tm));
 }
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &src)
@@ -31,6 +32,7 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src)
 		this->_minDate = src._minDate;
 		this->_maxDate = src._maxDate;
 		this->_badInput = src._badInput;
+		std::memcpy(&this->_t, &src._t, sizeof(struct tm));
 	}
 	return (*this);
 }
@@ -71,10 +73,16 @@ bool BitcoinExchange::isNum(const std::string &input)
 			int front = i - 1 >= 0 && !(input[i - 1] >= '0' && input[i - 1] <= '9');
 			int back = i + 1 != input.length() && !(input[i - 1] >= '0' && input[i - 1] <= '9');
 			if (head_tail || front || back)
+			{
+				this->_badInput = 4;
 				throw BadInput();
+			}
 		}
 		else if (!isdigit(input[i]) && input[i] != '.' && input[i] != ' ')
+		{
+			this->_badInput = 4;
 			throw BadInput();
+		}
 	}
 	return (true);
 }
@@ -97,33 +105,55 @@ double BitcoinExchange::ft_stod(const std::string &s)
 	return (res);
 }
 
+// void BitcoinExchange::checkDateValid(char delim, int size, std::string &s)
+// {
+// 	if (delim == '-')
+// 	{
+// 		if (size + 1 != 3)
+// 		{
+// 			this->_badInput = 0;
+// 			throw BadInput();
+// 		}
+// 		int count_delim = 0;
+// 		for (std::string::iterator i = s.begin(); i != s.end(); ++i)
+// 		{
+// 			if (count_delim >= 2)
+// 				break;
+// 			if (*i == '-')
+// 				++count_delim;
+// 			if (!(*i >= '0' && *i <= '9') && *i != '-')
+// 			{
+// 				this->_badInput = 0;
+// 				throw BadInput();
+// 			}
+// 		}
+// 	}
+// 	if (size == 0)
+// 	{
+// 		this->_badInput = 0;
+// 		throw BadInput();
+// 	}
+// }
+
 void BitcoinExchange::checkDateValid(char delim, int size, std::string &s)
 {
-	if (delim == '-')
+	if (delim == '-' && size + 1 != 3)
 	{
-		if (size + 1 != 3)
+		this->_badInput = 1;
+		throw BadInput();
+	}
+	int count_delim = 0;
+	for (std::string::iterator i = s.begin(); i != s.end(); ++i)
+	{
+		if (count_delim >= 2)
+			break;
+		if (*i == '-')
+			++count_delim;
+		if (!(*i >= '0' && *i <= '9') && *i != '-')
 		{
-			this->_badInput = 0;
+			this->_badInput = 1;
 			throw BadInput();
 		}
-		int count_delim = 0;
-		for (std::string::iterator i = s.begin(); i != s.end(); ++i)
-		{
-			if (count_delim >= 2)
-				break;
-			if (*i == '-')
-				++count_delim;
-			if (!(*i >= '0' && *i <= '9') && *i != '-')
-			{
-				this->_badInput = 0;
-				throw BadInput();
-			}
-		}
-	}
-	if (size == 0)
-	{
-		this->_badInput = 0;
-		throw BadInput();
 	}
 }
 
@@ -140,7 +170,10 @@ std::string *BitcoinExchange::ft_split(const std::string &s, char delim)
 		if (*i == delim)
 			++size;
 	}
-	checkDateValid(delim, size, str);
+	if (delim == '-')
+		checkDateValid(delim, size, str);
+	if (size == 0)
+		return (NULL);
 	res = new std::string[size + 1];
 	int i = 0;
 	while (end != std::string::npos)
@@ -156,14 +189,24 @@ std::string *BitcoinExchange::ft_split(const std::string &s, char delim)
 long long BitcoinExchange::ft_stoepoc(const std::string &input)
 {
 	std::string *date = this->ft_split(input, '-');
-	this->_t.tm_year = this->ft_stoi(date[0]) - 1900;
-	this->_t.tm_mon = this->ft_stoi(date[1]) - 1;
-	this->_t.tm_mday = this->ft_stoi(date[2]);
+	int y = this->ft_stoi(date[0]) - 1900;
+	int m = this->ft_stoi(date[1]) - 1;
+	int d = this->ft_stoi(date[2]);
+	this->_t.tm_year = y;
+	this->_t.tm_mon = m;
+	this->_t.tm_mday = d;
 	this->_t.tm_hour = 0;
 	this->_t.tm_min = 0;
 	this->_t.tm_sec = 0;
+	this->_t.tm_isdst = 0;
 	delete[] date;
-	return (mktime(&this->_t));
+	time_t tmp = mktime(&this->_t);
+	if (this->_t.tm_year != y || this->_t.tm_mon != m || this->_t.tm_mday != d)
+	{
+		this->_badInput = 1;
+		throw BadInput();
+	}
+	return (static_cast<long long>(tmp));
 }
 
 void BitcoinExchange::DbToMap(const std::string &filename)
@@ -244,9 +287,17 @@ void BitcoinExchange::check_format(const std::string &line)
 {
 	std::string *format = NULL;
 	double value;
+	this->_badInput = 0;
+	std::string tmp = line;
 	try
 	{
 		format = this->ft_split(line, '|');
+		if (format == NULL)
+		{
+			this->ft_stoepoc(line);
+			throw BadInput();
+		}
+		this->checkDateValid('0', 0, tmp);
 		value = this->ft_stod(format[1]);
 		this->isNum(format[1]);
 		this->findBitcoinPrice(format, value);
@@ -262,6 +313,8 @@ void BitcoinExchange::check_format(const std::string &line)
 			std::cout << "(Invalid date format) => " << line << std::endl;
 		else if (this->_badInput == 2)
 			std::cout << "(Date out of range, too late) => " << line << std::endl;
+		else if (this->_badInput == 4)
+			std::cout << "(Invalid bitcoin value) => should be float/positive integer " << line << std::endl;
 		else
 			std::cout << "correct format is [Year-Month-Day | float/positive integer] => " << line << std::endl;
 	}

@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:33:44 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/10 22:54:51 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/11 02:52:20 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ public:
 	void findBitcoinPrice(std::string *format, double value);
 	void check_format(const std::string &line);
 	void checkDateValid(char delim, int size, std::string &s);
+	// void checkDateValid(char delim, std::string &s);
 
 private:
 	char _delim;
