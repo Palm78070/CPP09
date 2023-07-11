@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 02:30:33 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 02:38:44 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,12 @@ const char *BitcoinExchange::NumberTooLarge::what() const throw()
 
 bool BitcoinExchange::isNum(const std::string &input)
 {
+	if (input.empty())
+	{
+		this->_badInput = 4;
+		throw BadInput();
+	}
+
 	for (std::string::size_type i = 0; i != input.length(); ++i)
 	{
 		while (i != input.length() && (input[i] == '-' || input[i] == '+'))
@@ -104,36 +110,6 @@ double BitcoinExchange::ft_stod(const std::string &s)
 	res = atof(s.c_str());
 	return (res);
 }
-
-// void BitcoinExchange::checkDateValid(char delim, int size, std::string &s)
-// {
-// 	if (delim == '-')
-// 	{
-// 		if (size + 1 != 3)
-// 		{
-// 			this->_badInput = 0;
-// 			throw BadInput();
-// 		}
-// 		int count_delim = 0;
-// 		for (std::string::iterator i = s.begin(); i != s.end(); ++i)
-// 		{
-// 			if (count_delim >= 2)
-// 				break;
-// 			if (*i == '-')
-// 				++count_delim;
-// 			if (!(*i >= '0' && *i <= '9') && *i != '-')
-// 			{
-// 				this->_badInput = 0;
-// 				throw BadInput();
-// 			}
-// 		}
-// 	}
-// 	if (size == 0)
-// 	{
-// 		this->_badInput = 0;
-// 		throw BadInput();
-// 	}
-// }
 
 void BitcoinExchange::checkDateValid(char delim, int size, std::string &s)
 {
