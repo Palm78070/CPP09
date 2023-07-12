@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 23:47:24 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 20:19:19 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 21:00:25 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include <string>
 #include <sstream>
 #include <stack>
-#include <ctype.h>
 
 class RPN
 {
@@ -28,6 +27,8 @@ public:
 	~RPN();
 
 	int ft_stoi(const std::string &s);
+	bool ft_isdigit(char c);
+	bool ft_isspace(char c);
 	bool isoperator(char c);
 	bool issignnum(std::string::iterator &it, std::string &line);
 	void printStack();

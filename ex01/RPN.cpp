@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 23:53:38 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 20:45:36 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 21:00:40 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,16 @@ int RPN::ft_stoi(const std::string &s)
 	return (res);
 }
 
+bool RPN::ft_isdigit(char c)
+{
+	return (c >= '0' && c <= '9');
+}
+
+bool RPN::ft_isspace(char c)
+{
+	return (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r' || c == ' ');
+}
+
 bool RPN::isoperator(char c)
 {
 	return (c == '+' || c == '-' || c == '*' || c == '/');
@@ -72,7 +82,7 @@ bool RPN::issignnum(std::string::iterator &it, std::string &line)
 {
 	if (!this->isoperator(*it))
 		return (false);
-	if ((it + 1) == line.end() || !isdigit(*(it + 1)))
+	if ((it + 1) == line.end() || !this->ft_isdigit(*(it + 1)))
 		return (false);
 	return (true);
 }
@@ -111,19 +121,19 @@ void RPN::readRPN(void)
 	int tmp = 0;
 	for (std::string::iterator it = this->_input.begin(); it != this->_input.end(); ++it)
 	{
-		while (isspace(*it))
+		while (this->ft_isspace(*it))
 			++it;
 		if (it == this->_input.end())
 			break;
-		if (!isdigit(*it) && !this->isoperator(*it))
+		if (!this->ft_isdigit(*it) && !this->isoperator(*it))
 		{
 			std::cout << "error char is " << *it << std::endl;
 			throw InputError();
 		}
-		if (this->issignnum(it, this->_input) || isdigit(*it))
+		if (this->issignnum(it, this->_input) || this->ft_isdigit(*it))
 		{
 			std::string::iterator end = it;
-			while (end != this->_input.end() && !isspace(*end))
+			while (end != this->_input.end() && !this->ft_isspace(*end))
 				++end;
 			tmp = this->ft_stoi(this->_input.substr(it - this->_input.begin(), this->_input.begin() - end));
 			this->_stack.push(tmp);
