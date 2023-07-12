@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 22:03:06 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 22:11:30 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,10 @@ int BitcoinExchange::ft_stoi(const std::string &s)
 
 	std::istringstream iss(s);
 	if (!(iss >> res))
-		throw ConvertError();
+	{
+		this->_badInput = 1;
+		throw BadInput();
+	}
 	return (res);
 }
 
