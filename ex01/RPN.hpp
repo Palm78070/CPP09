@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 23:47:24 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 21:00:25 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 21:46:24 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,21 @@ public:
 	void printStack();
 	void readRPN(void);
 	void calRPN(char cs);
+	bool checkError(char c);
 
-	class IstringstreamImpossible : public std::exception
+	class OutOfRange : public std::exception
 	{
 	public:
 		virtual const char *what() const throw();
 	};
 
 	class InputError : public std::exception
+	{
+	public:
+		virtual const char *what() const throw();
+	};
+
+	class UndefineResult : public std::exception
 	{
 	public:
 		virtual const char *what() const throw();

@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 23:53:38 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 21:00:40 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 21:48:20 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,26 @@ RPN::~RPN()
 {
 }
 
-const char *RPN::IstringstreamImpossible::what() const throw()
-{
-	return ("Can not convert istringstream into integer");
-}
-
 const char *RPN::InputError::what() const throw()
 {
 	return ("Input error: not digit number or math operator");
 }
 
+const char *RPN::UndefineResult::what() const throw()
+{
+	return ("Result is undefined: please check input => maybe divide by 0");
+}
+
+const char *RPN::OutOfRange::what() const throw()
+{
+	return ("Number is out of range: number have to be less than 10");
+}
+
 int RPN::ft_stoi(const std::string &s)
 {
-	std::cout << "s is " << s << std::endl;
-	int res = 0;
-
-	std::istringstream iss(s);
-	if (!(iss >> res))
-		throw IstringstreamImpossible();
+	double res = atof(s.c_str());
+	if (res >= 10)
+		throw OutOfRange();
 	return (res);
 }
 
@@ -102,7 +104,7 @@ void RPN::calRPN(char c)
 	int second = this->_stack.top();
 	this->_stack.pop();
 	int first = this->_stack.top();
-	std::cout << "first: " << first << " second: " << second << std::endl;
+
 	if (this->_stack.empty())
 		return;
 	if (c == '+')
@@ -112,8 +114,18 @@ void RPN::calRPN(char c)
 	else if (c == '*')
 		this->_stack.top() = first * second;
 	else if (c == '/')
+	{
+		if (second == 0)
+			throw UndefineResult();
 		this->_stack.top() = first / second;
-	std::cout << "res is " << this->_stack.top() << std::endl;
+	}
+}
+
+bool RPN::checkError(char c)
+{
+	if (!this->ft_isdigit(c) && !this->isoperator(c) && !this->ft_isspace(c))
+		throw InputError();
+	return (true);
 }
 
 void RPN::readRPN(void)
@@ -121,19 +133,14 @@ void RPN::readRPN(void)
 	int tmp = 0;
 	for (std::string::iterator it = this->_input.begin(); it != this->_input.end(); ++it)
 	{
-		while (this->ft_isspace(*it))
+		while (this->checkError(*it) && this->ft_isspace(*it))
 			++it;
 		if (it == this->_input.end())
 			break;
-		if (!this->ft_isdigit(*it) && !this->isoperator(*it))
-		{
-			std::cout << "error char is " << *it << std::endl;
-			throw InputError();
-		}
 		if (this->issignnum(it, this->_input) || this->ft_isdigit(*it))
 		{
 			std::string::iterator end = it;
-			while (end != this->_input.end() && !this->ft_isspace(*end))
+			while (this->checkError(*end) && end != this->_input.end() && !this->ft_isspace(*end))
 				++end;
 			tmp = this->ft_stoi(this->_input.substr(it - this->_input.begin(), this->_input.begin() - end));
 			this->_stack.push(tmp);
@@ -149,4 +156,5 @@ void RPN::readRPN(void)
 		if (it == this->_input.end())
 			break;
 	}
+	std::cout << this->_stack.top() << std::endl;
 }
