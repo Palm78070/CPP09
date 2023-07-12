@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 02:38:44 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 17:12:19 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,7 @@ void BitcoinExchange::check_format(const std::string &line)
 	std::string tmp = line;
 	try
 	{
-		format = this->ft_split(line, '|');
+		format = this->ft_split(line, this->_delim);
 		if (format == NULL)
 		{
 			this->ft_stoepoc(line);
