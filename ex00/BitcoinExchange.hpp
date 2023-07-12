@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:33:44 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 13:26:54 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 20:48:47 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 #include <limits>
 #include <iomanip>
 #include <cfloat>
-#include <ctype.h>
 
 typedef std::map<long long, double> db;
 
@@ -58,6 +57,7 @@ public:
 		virtual const char *what() const throw();
 	};
 
+	bool ft_isdigit(char c);
 	bool isNum(const std::string &input);
 	double ft_stod(const std::string &s);
 	int ft_stoi(const std::string &s);

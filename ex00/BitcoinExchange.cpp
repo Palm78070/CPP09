@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 17:12:19 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 20:51:09 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,11 @@ const char *BitcoinExchange::NumberTooLarge::what() const throw()
 	return ("Error: too large a number.");
 }
 
+bool BitcoinExchange::ft_isdigit(char c)
+{
+	return (c >= '0' && c <= '9');
+}
+
 bool BitcoinExchange::isNum(const std::string &input)
 {
 	if (input.empty())
@@ -84,7 +89,7 @@ bool BitcoinExchange::isNum(const std::string &input)
 				throw BadInput();
 			}
 		}
-		else if (!isdigit(input[i]) && input[i] != '.' && input[i] != ' ')
+		else if (!this->ft_isdigit(input[i]) && input[i] != '.' && input[i] != ' ')
 		{
 			this->_badInput = 4;
 			throw BadInput();
@@ -99,7 +104,7 @@ int BitcoinExchange::ft_stoi(const std::string &s)
 
 	std::istringstream iss(s);
 	if (!(iss >> res))
-		throw BadInput();
+		throw IstringstreamImpossible();
 	return (res);
 }
 
@@ -299,6 +304,10 @@ void BitcoinExchange::check_format(const std::string &line)
 		std::cout << e.what() << std::endl;
 	}
 	catch (const NumberTooLarge &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	catch (const IstringstreamImpossible &e)
 	{
 		std::cout << e.what() << std::endl;
 	}

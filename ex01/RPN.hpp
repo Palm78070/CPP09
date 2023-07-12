@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RPN.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 23:47:24 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/10 23:55:17 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 20:19:19 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 #define RPN_HPP
 
 #include <iostream>
+#include <string>
+#include <sstream>
+#include <stack>
+#include <ctype.h>
 
 class RPN
 {
@@ -23,8 +27,28 @@ public:
 	RPN &operator=(const RPN &src);
 	~RPN();
 
+	int ft_stoi(const std::string &s);
+	bool isoperator(char c);
+	bool issignnum(std::string::iterator &it, std::string &line);
+	void printStack();
+	void readRPN(void);
+	void calRPN(char cs);
+
+	class IstringstreamImpossible : public std::exception
+	{
+	public:
+		virtual const char *what() const throw();
+	};
+
+	class InputError : public std::exception
+	{
+	public:
+		virtual const char *what() const throw();
+	};
+
 private:
 	std::string _input;
+	std::stack<int> _stack;
 };
 
 #endif
