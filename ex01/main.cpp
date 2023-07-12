@@ -6,20 +6,11 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 23:07:02 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 21:53:06 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 22:26:37 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RPN.hpp"
-
-void dummy(std::string &s)
-{
-	RPN dummy(s);
-	std::string::iterator end = s.begin();
-	while (end != s.end() && !isspace(*end))
-		++end;
-	std::cout << dummy.ft_stoi(s.substr(0, s.begin() - end)) << std::endl;
-}
 
 int main(int argc, char **argv)
 {

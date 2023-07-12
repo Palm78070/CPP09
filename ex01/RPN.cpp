@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 23:53:38 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 21:48:20 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 22:27:18 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,12 @@ RPN::~RPN()
 
 const char *RPN::InputError::what() const throw()
 {
-	return ("Input error: not digit number or math operator");
+	return ("Input error: have character that is not digit number or math operator");
+}
+
+const char *RPN::NoNumber::what() const throw()
+{
+	return ("No number for operator");
 }
 
 const char *RPN::UndefineResult::what() const throw()
@@ -101,6 +106,8 @@ void RPN::printStack(void)
 
 void RPN::calRPN(char c)
 {
+	if (this->_stack.empty())
+		throw NoNumber();
 	int second = this->_stack.top();
 	this->_stack.pop();
 	int first = this->_stack.top();

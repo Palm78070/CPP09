@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 23:47:24 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 21:46:24 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 22:24:48 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,12 @@ public:
 	};
 
 	class UndefineResult : public std::exception
+	{
+	public:
+		virtual const char *what() const throw();
+	};
+
+	class NoNumber : public std::exception
 	{
 	public:
 		virtual const char *what() const throw();
