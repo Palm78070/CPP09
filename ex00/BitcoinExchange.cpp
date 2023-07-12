@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 20:51:09 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 22:03:06 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ BitcoinExchange::~BitcoinExchange()
 {
 }
 
-const char *BitcoinExchange::IstringstreamImpossible::what() const throw()
+const char *BitcoinExchange::ConvertError::what() const throw()
 {
-	return ("Can not convert istringstream into integer");
+	return ("Can not convert into integer");
 }
 
 const char *BitcoinExchange::BadInput::what() const throw()
@@ -104,7 +104,7 @@ int BitcoinExchange::ft_stoi(const std::string &s)
 
 	std::istringstream iss(s);
 	if (!(iss >> res))
-		throw IstringstreamImpossible();
+		throw ConvertError();
 	return (res);
 }
 
@@ -307,7 +307,7 @@ void BitcoinExchange::check_format(const std::string &line)
 	{
 		std::cout << e.what() << std::endl;
 	}
-	catch (const IstringstreamImpossible &e)
+	catch (const ConvertError &e)
 	{
 		std::cout << e.what() << std::endl;
 	}

@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:33:44 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 20:48:47 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/12 22:02:05 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ public:
 	BitcoinExchange(const BitcoinExchange &src);
 	BitcoinExchange &operator=(const BitcoinExchange &src);
 	~BitcoinExchange();
-	class IstringstreamImpossible : public std::exception
+	class ConvertError : public std::exception
 	{
 	public:
 		virtual const char *what() const throw();
