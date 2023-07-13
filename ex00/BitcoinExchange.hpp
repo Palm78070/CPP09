@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:33:44 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 22:02:05 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/13 17:21:52 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ public:
 	int ft_stoi(const std::string &s);
 	long long ft_stoepoc(const std::string &input);
 	std::string *ft_split(const std::string &s, char delim);
-	void check_input_error(const long long &epoc, const double &value);
+	void check_input_error(long long &epoc, const double &value);
 
 	void DbToMap(const std::string &filename);
 	void findBitcoinPrice(std::string *format, double value);

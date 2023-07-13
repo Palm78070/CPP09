@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 22:11:30 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/13 17:27:48 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ void BitcoinExchange::DbToMap(const std::string &filename)
 	this->_data = data;
 }
 
-void BitcoinExchange::check_input_error(const long long &epoc, const double &value)
+void BitcoinExchange::check_input_error(long long &epoc, const double &value)
 {
 	if (epoc < 0)
 	{
@@ -239,10 +239,7 @@ void BitcoinExchange::check_input_error(const long long &epoc, const double &val
 		throw BadInput();
 	}
 	else if (epoc > this->_maxDate)
-	{
-		this->_badInput = 2;
-		throw BadInput();
-	}
+		epoc = this->_maxDate;
 }
 
 void BitcoinExchange::findBitcoinPrice(std::string *format, double value)
@@ -295,8 +292,6 @@ void BitcoinExchange::check_format(const std::string &line)
 			std::cout << "(Date out of range, too old) => " << line << std::endl;
 		else if (this->_badInput == 1)
 			std::cout << "(Invalid date format) => " << line << std::endl;
-		else if (this->_badInput == 2)
-			std::cout << "(Date out of range, too late) => " << line << std::endl;
 		else if (this->_badInput == 4)
 			std::cout << "(Invalid bitcoin value) => should be float/positive integer " << line << std::endl;
 		else
