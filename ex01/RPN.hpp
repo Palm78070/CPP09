@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RPN.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 23:47:24 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 22:24:48 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/13 13:54:38 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ public:
 		virtual const char *what() const throw();
 	};
 
-	class NoNumber : public std::exception
+	class IncompleteInput : public std::exception
 	{
 	public:
 		virtual const char *what() const throw();

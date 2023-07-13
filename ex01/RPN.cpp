@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RPN.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 23:53:38 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/12 22:27:18 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/13 14:00:12 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 RPN::RPN(const std::string &input) : _input(input)
 {
+	if (this->_input.empty())
+		throw IncompleteInput();
 }
 
 RPN::RPN(const RPN &src)
@@ -47,9 +49,9 @@ const char *RPN::InputError::what() const throw()
 	return ("Input error: have character that is not digit number or math operator");
 }
 
-const char *RPN::NoNumber::what() const throw()
+const char *RPN::IncompleteInput::what() const throw()
 {
-	return ("No number for operator");
+	return ("Incomplete input: No number or operator to calculate RPN");
 }
 
 const char *RPN::UndefineResult::what() const throw()
@@ -107,7 +109,7 @@ void RPN::printStack(void)
 void RPN::calRPN(char c)
 {
 	if (this->_stack.empty())
-		throw NoNumber();
+		throw IncompleteInput();
 	int second = this->_stack.top();
 	this->_stack.pop();
 	int first = this->_stack.top();
@@ -130,6 +132,8 @@ void RPN::calRPN(char c)
 
 bool RPN::checkError(char c)
 {
+	if (c == '\0')
+		throw IncompleteInput();
 	if (!this->ft_isdigit(c) && !this->isoperator(c) && !this->ft_isspace(c))
 		throw InputError();
 	return (true);
