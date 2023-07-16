@@ -6,7 +6,7 @@
 #    By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/16 18:29:26 by rthammat          #+#    #+#              #
-#    Updated: 2023/07/16 18:31:25 by rthammat         ###   ########.fr        #
+#    Updated: 2023/07/16 22:44:51 by rthammat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ CXXFLAGS := -Wall -Werror -Wextra -fsanitize=address --std=c++98 -g
 #CXXFLAGS := -Wall -Werror -Wextra --std=c++98 -g
 
 SRCS := main.cpp \
+		PmergeMe.cpp \
 
 OBJS := $(SRCS:.cpp=.o)
 
