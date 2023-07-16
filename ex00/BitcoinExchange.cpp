@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/13 17:27:48 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/16 20:06:40 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,18 +172,39 @@ std::string *BitcoinExchange::ft_split(const std::string &s, char delim)
 
 long long BitcoinExchange::ft_stoepoc(const std::string &input)
 {
-	std::string *date = this->ft_split(input, '-');
-	int y = this->ft_stoi(date[0]) - 1900;
-	int m = this->ft_stoi(date[1]) - 1;
-	int d = this->ft_stoi(date[2]);
-	this->_t.tm_year = y;
-	this->_t.tm_mon = m;
-	this->_t.tm_mday = d;
-	this->_t.tm_hour = 0;
-	this->_t.tm_min = 0;
-	this->_t.tm_sec = 0;
-	this->_t.tm_isdst = 0;
-	delete[] date;
+	std::string *date = NULL;
+	int y = 0;
+	int m = 0;
+	int d = 0;
+	try
+	{
+		date = this->ft_split(input, '-');
+		y = this->ft_stoi(date[0]) - 1900;
+		m = this->ft_stoi(date[1]) - 1;
+		d = this->ft_stoi(date[2]);
+
+		this->_t.tm_year = y;
+		this->_t.tm_mon = m;
+		this->_t.tm_mday = d;
+		this->_t.tm_hour = 0;
+		this->_t.tm_min = 0;
+		this->_t.tm_sec = 0;
+		this->_t.tm_isdst = 0;
+		if (date)
+		{
+			delete[] date;
+			date = NULL;
+		}
+	}
+	catch (const BadInput &e)
+	{
+		if (date)
+		{
+			std::cout << input << std::endl;
+			delete[] date;
+		}
+		throw BadInput();
+	}
 	time_t tmp = mktime(&this->_t);
 	if (this->_t.tm_year != y || this->_t.tm_mon != m || this->_t.tm_mday != d)
 	{
@@ -212,11 +233,26 @@ void BitcoinExchange::DbToMap(const std::string &filename)
 	while (getline(dbFile, line))
 	{
 		std::string *format = this->ft_split(line, ',');
-		long long date = this->ft_stoepoc(format[0]);
-		this->_minDate = (this->_minDate > date && date >= 0) ? date : this->_minDate;
-		this->_maxDate = (this->_maxDate < date && date >= 0) ? date : this->_maxDate;
-		data[date] = this->ft_stod(format[1]);
-		delete[] format;
+		try
+		{
+			long long date = this->ft_stoepoc(format[0]);
+
+			this->_minDate = (this->_minDate > date && date >= 0) ? date : this->_minDate;
+			this->_maxDate = (this->_maxDate < date && date >= 0) ? date : this->_maxDate;
+			data[date] = this->ft_stod(format[1]);
+			if (format)
+			{
+			 	delete[] format;
+				format = NULL;
+			}
+		}
+		catch (const BadInput &e)
+		{
+			std::cout << "hello world" << std::endl;
+			if (format)
+				delete[] format;
+			throw BadInput();
+		}
 	}
 	dbFile.close();
 	this->_data = data;
@@ -283,10 +319,15 @@ void BitcoinExchange::check_format(const std::string &line)
 		this->isNum(format[1]);
 		this->findBitcoinPrice(format, value);
 		if (format)
+		{
 			delete[] format;
+			format = NULL;
+		}
 	}
 	catch (BadInput &e)
 	{
+		if (format)
+			delete[] format;
 		std::cout << e.what();
 		if (this->_badInput == -1)
 			std::cout << "(Date out of range, too old) => " << line << std::endl;
@@ -299,14 +340,20 @@ void BitcoinExchange::check_format(const std::string &line)
 	}
 	catch (const NotPositiveNumber &e)
 	{
+		if (format)
+			delete[] format;
 		std::cout << e.what() << std::endl;
 	}
 	catch (const NumberTooLarge &e)
 	{
+		if (format)
+			delete[] format;
 		std::cout << e.what() << std::endl;
 	}
 	catch (const ConvertError &e)
 	{
+		if (format)
+			delete[] format;
 		std::cout << e.what() << std::endl;
 	}
 }
