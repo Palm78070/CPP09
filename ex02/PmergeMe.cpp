@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:39:59 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/18 19:26:59 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/18 19:41:48 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ PmergeMe::PmergeMe(int argc, char **argv) : _len(argc - 1)
 	for (int i = 1; i <= this->_len; ++i)
 	{
 		this->_vec.push_back(ft_stoi(argv[i]));
-		this->_lst.push_back(this->_vec[i - 1]);
+		this->_deq.push_back(this->_vec[i - 1]);
 	}
 	// for (int i = 0; i < this->_len; ++i)
 	// 	std::cout << this->_vec[i] << std::endl;
@@ -41,13 +41,13 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &src)
 			for (size_t i = 0; i < this->_vec.size(); ++i)
 				this->_vec.push_back(src._vec[i]);
 		}
-		if (!this->_lst.empty())
+		if (!this->_deq.empty())
 		{
-			this->_lst.clear();
-			std::list<int> tmp = src._lst;
-			for (std::list<int>::iterator it = tmp.begin(); it != tmp.end(); ++it)
-				this->_lst.push_back(*it);
-			this->_lst = src._lst;
+			this->_deq.clear();
+			std::deque<int> tmp = src._deq;
+			for (std::deque<int>::iterator it = tmp.begin(); it != tmp.end(); ++it)
+				this->_deq.push_back(*it);
+			this->_deq = src._deq;
 		}
 	}
 	return (*this);
@@ -164,6 +164,9 @@ void PmergeMe::merge_insert_sort(void)
 {
 	std::vector<int> mainV;
 	std::vector<int> subV;
+	std::deque<int> mainD;
+	std::deque<int> subD;
+
 	try
 	{
 		for (int i = 0; i < this->_len; ++i)
@@ -202,6 +205,41 @@ void PmergeMe::merge_insert_sort(void)
 		for (int i = 0; i < len3; ++i)
 		{
 			std::cout << mainV[i] << ", ";
+		}
+		std::cout << std::endl;
+
+		std::cout << "\n\\\\\\\\\\\\Test for deque\\\\\\\\\\\\\\\\" << std::endl;
+		i = 0;
+		while (i < this->_len)
+		{
+			if (this->_len % 2 != 0 && i == this->_len - 1)
+				++i;
+			else
+			{
+				this->ft_pairing(this->_deq, mainD, subD, i, i + 1);
+				i += 2;
+			}
+		}
+		std::cout << "\nmain chain" << std::endl;
+		len = mainD.size();
+		for (int i = 0; i < len; ++i)
+		{
+			std::cout << mainD[i] << ", ";
+		}
+		std::cout << std::endl;
+		std::cout << "\nsub chain" << std::endl;
+		len2 = subD.size();
+		for (int i = 0; i < len2; ++i)
+		{
+			std::cout << subD[i] << ", ";
+			this->addMainChain(mainD, subD[i]);
+		}
+		std::cout << std::endl;
+		std::cout << "\nSorted main chain" << std::endl;
+		len3 = mainD.size();
+		for (int i = 0; i < len3; ++i)
+		{
+			std::cout << mainD[i] << ", ";
 		}
 		std::cout << std::endl;
 	}

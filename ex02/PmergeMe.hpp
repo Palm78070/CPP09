@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:32:25 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/18 19:22:01 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/18 19:36:18 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include <iostream>
 #include <vector>
-#include <list>
+#include <deque>
 #include <cstdlib>
 #include <sstream>
 #include <algorithm>
@@ -118,7 +118,7 @@ public:
 
 private:
 	std::vector<int> _vec;
-	std::list<int> _lst;
+	std::deque<int> _deq;
 	int _len;
 };
 
