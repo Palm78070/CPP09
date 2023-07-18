@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:32:25 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/18 20:15:55 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/19 02:43:28 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ public:
 		if (jn == jacobsthal(c[mid]))
 			return (mid + 1);
 		if (jn > jacobsthal(c[mid]))
-			return (binarySearch(c, n, mid + 1, h));
-		return (binarySearch(c, n, l, mid - 1));
+			return (jacobsthalSearch(c, n, mid + 1, h));
+		return (jacobsthalSearch(c, n, l, mid - 1));
 	}
 
 	template <typename T>
