@@ -3,17 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:39:59 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/16 23:02:28 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/18 01:42:58 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
 
-PmergeMe::PmergeMe(const std::string &input) : _input(input), _len(0)
+PmergeMe::PmergeMe(int argc, char **argv) : _len(argc - 1)
 {
+	for (int i = 1; i <= this->_len; ++i)
+	{
+		this->_vec.push_back(ft_stoi(argv[i]));
+		this->_lst.push_back(this->_vec[i - 1]);
+	}
+	// for (int i = 0; i < this->_len; ++i)
+	// 	std::cout << this->_vec[i] << std::endl;
+	// for (std::list<int>::iterator it = this->_lst.begin(); it != this->_lst.end(); ++it)
+	// 	std::cout << *it << std::endl;
 }
 
 PmergeMe::PmergeMe(const PmergeMe &src)
@@ -25,7 +34,6 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &src)
 {
 	if (this != &src)
 	{
-		this->_input = src._input;
 		this->_len = src._len;
 		if (!this->_vec.empty())
 		{
@@ -59,6 +67,24 @@ const char *PmergeMe::NotInteger::what() const throw()
 	return ("Error: Not integer");
 }
 
+bool PmergeMe::isNum(const std::string &input)
+{
+	if (input.empty())
+	{
+		throw NotInteger();
+	}
+	std::string::size_type i = 0;
+	while (i != input.length() && (input[i] == '+' || input[i] == '-'))
+		++i;
+	while (i != input.length())
+	{
+		if (!(input[i] >= '0' && input[i] <= '9'))
+			return (false);
+		++i;
+	}
+	return (true);
+}
+
 std::string *PmergeMe::ft_split(const std::string &s, char delim)
 {
 	std::string *res;
@@ -87,6 +113,8 @@ std::string *PmergeMe::ft_split(const std::string &s, char delim)
 
 int PmergeMe::ft_stoi(const std::string &s)
 {
+	if (!this->isNum(s))
+		throw NotInteger();
 	double res = atof(s.c_str());
 	std::istringstream iss(s);
 
@@ -100,26 +128,43 @@ int PmergeMe::ft_stoi(const std::string &s)
 	return (res);
 }
 
+// void PmergeMe::addMainChain(void)
+// {
+
+// }
+
+// void PmergeMe::ft_pairing(int i1, int i2)
+// {
+// 	if (this->_vec[i2] < this->_vec[i1])
+// 		std::swap(this->_vec[i1], this->_vec[i2]);
+// }
+
 void PmergeMe::merge_insert_sort(void)
 {
 	try
 	{
-		std::string *line = this->ft_split(this->_input, ' ');
-		this->_len += 1;
-		if (line == NULL)
-		{
-			ft_stoi(this->_input);
-			////Only 1 number
-		}
 		for (int i = 0; i < this->_len; ++i)
 		{
-			this->_vec.push_back(ft_stoi(line[i]));
-			this->_lst.push_back(this->_vec[i]);
+			std::cout << this->_vec[i] << ", ";
 		}
+		std::cout << std::endl;
+		int i = 0;
+		while (i < this->_len)
+		{
+			if (this->_len % 2 != 0 && i == this->_len - 1)
+				++i;
+			else
+			{
+				this->ft_pairing(this->_vec, i, i + 1);
+				i += 2;
+			}
+		}
+		std::cout << "\nafter pairing" << std::endl;
 		for (int i = 0; i < this->_len; ++i)
-			std::cout << this->_vec[i] << std::endl;
-		for (std::list<int>::iterator it = this->_lst.begin(); it != this->_lst.end(); ++it)
-			std::cout << *it << std::endl;
+		{
+			std::cout << this->_vec[i] << ", ";
+		}
+		std::cout << std::endl;
 	}
 	catch (const NegativeNumber &e)
 	{

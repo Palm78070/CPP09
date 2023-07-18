@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:30:00 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/16 22:36:09 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/18 14:40:14 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 	{
 		if (argc < 2)
 			throw(std::runtime_error("invalid argument: ./PmergeMe <input_file>"));
-		PmergeMe x(argv[1]);
+		PmergeMe x(argc, argv);
 		x.merge_insert_sort();
 	}
 	catch (const std::exception &e)
