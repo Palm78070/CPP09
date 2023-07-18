@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:39:59 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/18 19:41:48 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/18 20:28:49 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,17 +128,6 @@ int PmergeMe::ft_stoi(const std::string &s)
 	return (res);
 }
 
-// void PmergeMe::addMainChain(void)
-// {
-
-// }
-
-// void PmergeMe::ft_pairing(int i1, int i2)
-// {
-// 	if (this->_vec[i2] < this->_vec[i1])
-// 		std::swap(this->_vec[i1], this->_vec[i2]);
-// }
-
 int PmergeMe::jacobsthal(int n)
 {
 	int x = 0;
@@ -160,6 +149,12 @@ int PmergeMe::jacobsthal(int n)
 		return (-1);
 }
 
+double PmergeMe::ft_time(time_t start, time_t end)
+{
+	double elasp_time = static_cast<double>(end - start) / CLOCKS_PER_SEC;
+	return (elasp_time * 1000000);
+}
+
 void PmergeMe::merge_insert_sort(void)
 {
 	std::vector<int> mainV;
@@ -169,12 +164,10 @@ void PmergeMe::merge_insert_sort(void)
 
 	try
 	{
-		for (int i = 0; i < this->_len; ++i)
-		{
-			std::cout << this->_vec[i] << ", ";
-		}
-		std::cout << std::endl;
+		std::cout << "Before: ";
+		this->printContainer(this->_vec);
 		int i = 0;
+		clock_t start = clock();
 		while (i < this->_len)
 		{
 			if (this->_len % 2 != 0 && i == this->_len - 1)
@@ -185,31 +178,15 @@ void PmergeMe::merge_insert_sort(void)
 				i += 2;
 			}
 		}
-		std::cout << "\nmain chain" << std::endl;
-		int len = mainV.size();
-		for (int i = 0; i < len; ++i)
-		{
-			std::cout << mainV[i] << ", ";
-		}
-		std::cout << std::endl;
-		std::cout << "\nsub chain" << std::endl;
 		int len2 = subV.size();
 		for (int i = 0; i < len2; ++i)
-		{
-			std::cout << subV[i] << ", ";
 			this->addMainChain(mainV, subV[i]);
-		}
-		std::cout << std::endl;
-		std::cout << "\nSorted main chain" << std::endl;
-		int len3 = mainV.size();
-		for (int i = 0; i < len3; ++i)
-		{
-			std::cout << mainV[i] << ", ";
-		}
-		std::cout << std::endl;
-
-		std::cout << "\n\\\\\\\\\\\\Test for deque\\\\\\\\\\\\\\\\" << std::endl;
+		clock_t end = clock();
+		double timeV = this->ft_time(start, end);
+		std::cout << "After (vector) ";
+		this->printContainer(mainV);
 		i = 0;
+		start = clock();
 		while (i < this->_len)
 		{
 			if (this->_len % 2 != 0 && i == this->_len - 1)
@@ -220,28 +197,15 @@ void PmergeMe::merge_insert_sort(void)
 				i += 2;
 			}
 		}
-		std::cout << "\nmain chain" << std::endl;
-		len = mainD.size();
-		for (int i = 0; i < len; ++i)
-		{
-			std::cout << mainD[i] << ", ";
-		}
-		std::cout << std::endl;
-		std::cout << "\nsub chain" << std::endl;
 		len2 = subD.size();
 		for (int i = 0; i < len2; ++i)
-		{
-			std::cout << subD[i] << ", ";
 			this->addMainChain(mainD, subD[i]);
-		}
-		std::cout << std::endl;
-		std::cout << "\nSorted main chain" << std::endl;
-		len3 = mainD.size();
-		for (int i = 0; i < len3; ++i)
-		{
-			std::cout << mainD[i] << ", ";
-		}
-		std::cout << std::endl;
+		end = clock();
+		double timeD = this->ft_time(start, end);
+		std::cout << "After (deque) ";
+		this->printContainer(mainD);
+		std::cout << "time to process a range of " << this->_vec.size() << " elements with std::vector : " << timeV << "us" << std::endl;
+		std::cout << "time to process a range of " << this->_deq.size() << " elements with std::vector : " << timeD << "us" << std::endl;
 	}
 	catch (const NegativeNumber &e)
 	{

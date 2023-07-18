@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:32:25 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/18 19:36:18 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/18 20:15:55 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <deque>
 #include <cstdlib>
 #include <sstream>
+#include <ctime>
 #include <algorithm>
 
 class PmergeMe
@@ -33,6 +34,7 @@ public:
 	bool isNum(const std::string &input);
 	int ft_stoi(const std::string &s);
 	int jacobsthal(int n);
+	double ft_time(time_t start, time_t end);
 
 	template <typename T>
 	int binarySearch(T &c, int n, int l, int h)
@@ -102,6 +104,23 @@ public:
 			addMainChain(main, c[i1]);
 			addSubChain(sub, c[i2]);
 		}
+	}
+
+	template <typename T>
+	void printContainer(T &c)
+	{
+		int end = c.size();
+		int flag = 0;
+		if (end > 20)
+		{
+			end = 4;
+			flag = 1;
+		}
+		for (int i = 0; i < end; i++)
+			std::cout << c[i] << " ";
+		if (flag)
+			std::cout << "[...]";
+		std::cout << std::endl;
 	}
 
 	class NegativeNumber : public std::exception
