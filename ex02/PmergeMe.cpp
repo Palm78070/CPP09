@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:39:59 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/18 01:42:58 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/18 19:26:59 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,8 +139,31 @@ int PmergeMe::ft_stoi(const std::string &s)
 // 		std::swap(this->_vec[i1], this->_vec[i2]);
 // }
 
+int PmergeMe::jacobsthal(int n)
+{
+	int x = 0;
+	int y = 1;
+
+	if (n == 0)
+		return (0);
+	int pos = 1;
+	while (y < n)
+	{
+		unsigned int next = y + (2 * x);
+		x = y;
+		y = next;
+		++pos;
+	}
+	if (y >= n)
+		return (pos);
+	else
+		return (-1);
+}
+
 void PmergeMe::merge_insert_sort(void)
 {
+	std::vector<int> mainV;
+	std::vector<int> subV;
 	try
 	{
 		for (int i = 0; i < this->_len; ++i)
@@ -155,14 +178,30 @@ void PmergeMe::merge_insert_sort(void)
 				++i;
 			else
 			{
-				this->ft_pairing(this->_vec, i, i + 1);
+				this->ft_pairing(this->_vec, mainV, subV, i, i + 1);
 				i += 2;
 			}
 		}
-		std::cout << "\nafter pairing" << std::endl;
-		for (int i = 0; i < this->_len; ++i)
+		std::cout << "\nmain chain" << std::endl;
+		int len = mainV.size();
+		for (int i = 0; i < len; ++i)
 		{
-			std::cout << this->_vec[i] << ", ";
+			std::cout << mainV[i] << ", ";
+		}
+		std::cout << std::endl;
+		std::cout << "\nsub chain" << std::endl;
+		int len2 = subV.size();
+		for (int i = 0; i < len2; ++i)
+		{
+			std::cout << subV[i] << ", ";
+			this->addMainChain(mainV, subV[i]);
+		}
+		std::cout << std::endl;
+		std::cout << "\nSorted main chain" << std::endl;
+		int len3 = mainV.size();
+		for (int i = 0; i < len3; ++i)
+		{
+			std::cout << mainV[i] << ", ";
 		}
 		std::cout << std::endl;
 	}
