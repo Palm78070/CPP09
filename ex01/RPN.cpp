@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RPN.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 23:53:38 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/13 14:00:12 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/19 18:03:06 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ bool RPN::checkError(char c)
 void RPN::readRPN(void)
 {
 	int tmp = 0;
+	int op = 0;
 	for (std::string::iterator it = this->_input.begin(); it != this->_input.end(); ++it)
 	{
 		while (this->checkError(*it) && this->ft_isspace(*it))
@@ -161,11 +162,14 @@ void RPN::readRPN(void)
 		}
 		else if (this->isoperator(*it))
 		{
+			op += 1;
 			this->calRPN(*it);
 			++it;
 		}
 		if (it == this->_input.end())
 			break;
 	}
+	if (!op)
+		throw IncompleteInput();
 	std::cout << this->_stack.top() << std::endl;
 }
