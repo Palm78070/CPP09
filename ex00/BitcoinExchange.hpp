@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:33:44 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/16 19:14:54 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/19 17:42:34 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@
 #include <ctime>
 #include <sstream>
 #include <cstdlib>
+#include <cstring>
 #include <string>
 #include <limits>
 #include <iomanip>
-#include <cfloat>
+#include <stdexcept>
 
 typedef std::map<long long, double> db;
 
@@ -69,7 +70,6 @@ public:
 	void findBitcoinPrice(std::string *format, double value);
 	void check_format(const std::string &line);
 	void checkDateValid(char delim, int size, std::string &s);
-	// void checkDateValid(char delim, std::string &s);
 
 private:
 	char _delim;

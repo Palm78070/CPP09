@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 21:17:10 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/16 20:06:40 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/19 17:51:24 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,13 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src)
 		this->_minDate = src._minDate;
 		this->_maxDate = src._maxDate;
 		this->_badInput = src._badInput;
-		std::memcpy(&this->_t, &src._t, sizeof(struct tm));
+		this->_t.tm_year = src._t.tm_year;
+		this->_t.tm_mon = src._t.tm_mon;
+		this->_t.tm_mday = src._t.tm_mday;
+		this->_t.tm_hour = src._t.tm_hour;
+		this->_t.tm_min = src._t.tm_min;
+		this->_t.tm_sec = src._t.tm_sec;
+		this->_t.tm_isdst = src._t.tm_isdst;
 	}
 	return (*this);
 }
@@ -242,7 +248,7 @@ void BitcoinExchange::DbToMap(const std::string &filename)
 			data[date] = this->ft_stod(format[1]);
 			if (format)
 			{
-			 	delete[] format;
+				delete[] format;
 				format = NULL;
 			}
 		}
