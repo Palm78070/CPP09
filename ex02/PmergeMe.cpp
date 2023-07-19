@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:39:59 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/18 20:44:16 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/19 18:34:49 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,6 @@ PmergeMe::PmergeMe(int argc, char **argv) : _len(argc - 1)
 		this->_vec.push_back(ft_stoi(argv[i]));
 		this->_deq.push_back(this->_vec[i - 1]);
 	}
-	// for (int i = 0; i < this->_len; ++i)
-	// 	std::cout << this->_vec[i] << std::endl;
-	// for (std::list<int>::iterator it = this->_lst.begin(); it != this->_lst.end(); ++it)
-	// 	std::cout << *it << std::endl;
 }
 
 PmergeMe::PmergeMe(const PmergeMe &src)
@@ -36,19 +32,15 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &src)
 	{
 		this->_len = src._len;
 		if (!this->_vec.empty())
-		{
 			this->_vec.clear();
-			for (size_t i = 0; i < this->_vec.size(); ++i)
-				this->_vec.push_back(src._vec[i]);
-		}
+		for (int i = 0; i < src._len; ++i)
+			this->_vec.push_back(src._vec[i]);
+
 		if (!this->_deq.empty())
-		{
 			this->_deq.clear();
-			std::deque<int> tmp = src._deq;
-			for (std::deque<int>::iterator it = tmp.begin(); it != tmp.end(); ++it)
-				this->_deq.push_back(*it);
-			this->_deq = src._deq;
-		}
+		std::deque<int> tmp = src._deq;
+		for (std::deque<int>::iterator it = tmp.begin(); it != tmp.end(); ++it)
+			this->_deq.push_back(*it);
 	}
 	return (*this);
 }
@@ -171,7 +163,10 @@ void PmergeMe::merge_insert_sort(void)
 		while (i < this->_len)
 		{
 			if (this->_len % 2 != 0 && i == this->_len - 1)
+			{
+				this->addSubChain(subV, this->_vec[i]);
 				++i;
+			}
 			else
 			{
 				this->ft_pairing(this->_vec, mainV, subV, i, i + 1);
@@ -190,7 +185,10 @@ void PmergeMe::merge_insert_sort(void)
 		while (i < this->_len)
 		{
 			if (this->_len % 2 != 0 && i == this->_len - 1)
+			{
+				this->addSubChain(subD, this->_deq[i]);
 				++i;
+			}
 			else
 			{
 				this->ft_pairing(this->_deq, mainD, subD, i, i + 1);
