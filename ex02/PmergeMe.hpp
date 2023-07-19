@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:32:25 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/19 18:18:43 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/20 02:53:07 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,16 +110,8 @@ public:
 	void printContainer(T &c)
 	{
 		int end = c.size();
-		int flag = 0;
-		if (end > 20)
-		{
-			end = 4;
-			flag = 1;
-		}
 		for (int i = 0; i < end; i++)
 			std::cout << c[i] << " ";
-		if (flag)
-			std::cout << "[...]";
 		std::cout << std::endl;
 	}
 
