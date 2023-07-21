@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/04 19:30:49 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/19 17:36:25 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/21 16:12:25 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,6 @@ int main(int argc, char **argv)
 	{
 		std::cout << e.what() << std::endl;
 		return (1);
-	}
-	catch (const std::ios_base::failure &e)
-	{
-		std::cout << e.what() << std::endl;
-		exit(1);
 	}
 	return (0);
 }
