@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rthammat <rthammat@42.fr>                  +#+  +:+       +#+        */
+/*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 18:39:59 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/20 02:50:57 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/21 14:19:46 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,8 @@ int PmergeMe::jacobsthal(int n)
 double PmergeMe::ft_time(time_t start, time_t end)
 {
 	double elasp_time = static_cast<double>(end - start) / CLOCKS_PER_SEC;
-	return (elasp_time * 1000000);
+	//return (elasp_time * 1000000);
+	return (elasp_time);
 }
 
 void PmergeMe::merge_insert_sort(void)
@@ -202,8 +203,8 @@ void PmergeMe::merge_insert_sort(void)
 		double timeD = this->ft_time(start, end);
 		std::cout << "After (deque) ";
 		this->printContainer(mainD);
-		std::cout << "time to process a range of " << this->_vec.size() << " elements with std::vector : " << timeV << "us" << std::endl;
-		std::cout << "time to process a range of " << this->_deq.size() << " elements with std::vector : " << timeD << "us" << std::endl;
+		std::cout << "time to process a range of " << this->_vec.size() << " elements with std::vector : " << std::fixed << timeV << " us" << std::endl;
+		std::cout << "time to process a range of " << this->_deq.size() << " elements with std::deque : " << std::fixed << timeD << " us" << std::endl;
 	}
 	catch (const NegativeNumber &e)
 	{
