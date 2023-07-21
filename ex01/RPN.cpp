@@ -6,7 +6,7 @@
 /*   By: rthammat <rthammat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 23:53:38 by rthammat          #+#    #+#             */
-/*   Updated: 2023/07/19 18:03:06 by rthammat         ###   ########.fr       */
+/*   Updated: 2023/07/21 14:38:17 by rthammat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void RPN::printStack(void)
 
 void RPN::calRPN(char c)
 {
-	if (this->_stack.empty())
+	if (this->_stack.empty() || this->_stack.size() == 1)
 		throw IncompleteInput();
 	int second = this->_stack.top();
 	this->_stack.pop();
